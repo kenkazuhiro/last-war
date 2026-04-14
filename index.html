@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perang Gurun — Last War</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #0f1318;
+    --bg3: #141a21;
+    --panel: #111720;
+    --border: #1e2d3d;
+    --border2: #2a3f56;
+    --gold: #c8922a;
+    --gold2: #e8b84b;
+    --gold3: #f5d78a;
+    --red: #c0392b;
+    --red2: #e74c3c;
+    --teal: #1a8a7a;
+    --teal2: #22b59c;
+    --text: #d4dde8;
+    --text2: #7a93aa;
+    --text3: #4a6070;
+    --accent: #2a7bc8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,146,42,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,146,42,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
+    z-index: 100;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .header-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: .75rem;
+    opacity: .8;
+  }
+
+  .header h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--gold3) 0%, var(--gold2) 40%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: .5rem;
+  }
+
+  .header-sub {
+    font-size: 15px;
+    color: var(--text2);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  .header-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.25rem 0;
+    justify-content: center;
+  }
+
+  .header-line::before,
+  .header-line::after {
+    content: '';
+    flex: 1;
+    max-width: 180px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .header-line::after {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .diamond {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  /* PANEL */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold2), transparent);
+    opacity: .5;
+  }
+
+  .panel-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
+  }
+
+  /* FORM ELEMENTS */
+  .row {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .row.col2 { grid-template-columns: 1fr 1fr; }
+  .row.col3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row.col4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .field label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .15em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  input[type=text], select, textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    padding: 9px 12px;
+    transition: border-color .2s, background .2s;
+    outline: none;
+    appearance: none;
+  }
+
+  input[type=text]:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    background: var(--bg3);
+  }
+
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8922a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  /* TEAM BLOCKS */
+  .teams-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+
+  .team-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    transition: border-color .2s;
+  }
+
+  .team-block:hover { border-color: var(--border2); }
+
+  .team-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .75rem;
+  }
+
+  .team-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--gold2);
+    text-transform: uppercase;
+  }
+
+  .loc-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .08em;
+    color: var(--teal2);
+    background: rgba(26,138,122,.12);
+    border: 1px solid rgba(26,138,122,.3);
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .player-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .p-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    min-width: 16px;
+    text-align: right;
+  }
+
+  .player-input-row input {
+    flex: 1;
+    font-size: 14px;
+    padding: 7px 10px;
+  }
+
+  /* SUPPORT & CADANGAN */
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .cadangan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .info-box {
+    background: rgba(200,146,42,.06);
+    border: 1px solid rgba(200,146,42,.2);
+    border-radius: 4px;
+    padding: .6rem 1rem;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .info-box.teal {
+    background: rgba(26,138,122,.06);
+    border-color: rgba(26,138,122,.25);
+    color: var(--teal2);
+  }
+
+  .info-box.red {
+    background: rgba(192,57,43,.06);
+    border-color: rgba(192,57,43,.25);
+    color: #e88;
+  }
+
+  /* NOTES */
+  .notes-list {
+    list-style: none;
+    display: grid;
+    gap: 6px;
+  }
+
+  .notes-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text2);
+    padding: .5rem .75rem;
+    background: var(--bg2);
+    border-radius: 4px;
+    border-left: 2px solid var(--gold);
+    align-items: flex-start;
+  }
+
+  .notes-list li .icon {
+    color: var(--gold2);
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 13px 20px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+    color: #0a0c0f;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--gold2) 0%, var(--gold3) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(200,146,42,.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border2);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold2);
+    background: rgba(200,146,42,.05);
+  }
+
+  .btn-secondary.hidden { display: none; }
+
+  /* RESULT */
+  .result-container {
+    display: none;
+    margin-top: 1.5rem;
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .75rem;
+  }
+
+  .result-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .copy-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--teal2);
+    opacity: 0;
+    transition: opacity .3s;
+  }
+
+  .copy-status.show { opacity: 1; }
+
+  pre#result-text {
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 1.25rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  pre#result-text::-webkit-scrollbar { width: 6px; }
+  pre#result-text::-webkit-scrollbar-track { background: var(--bg2); }
+  pre#result-text::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* PRIORITY TABLE */
+  .priority-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .priority-table tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+
+  .priority-table tr:hover { background: rgba(255,255,255,.02); }
+
+  .priority-table td {
+    padding: 8px 12px;
+    color: var(--text);
+  }
+
+  .priority-table td:first-child {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    width: 32px;
+  }
+
+  .priority-table td:last-child {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: right;
+  }
+
+  .prio-high { color: var(--red2) !important; }
+  .prio-mid  { color: var(--gold2) !important; }
+  .prio-low  { color: var(--teal2) !important; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: .1em;
+  }
+
+  @media (max-width: 600px) {
+    .teams-grid, .row.col2, .row.col3, .row.col4,
+    .support-grid, .cadangan-grid { grid-template-columns: 1fr; }
+    .btn-row { flex-direction: column; }
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel { animation: fadeIn .4s ease both; }
+  .panel:nth-child(1) { animation-delay: .05s; }
+  .panel:nth-child(2) { animation-delay: .10s; }
+  .panel:nth-child(3) { animation-delay: .15s; }
+  .panel:nth-child(4) { animation-delay: .20s; }
+  .panel:nth-child(5) { animation-delay: .25s; }
+  .panel:nth-child(6) { animation-delay: .30s; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-tag">⬡ Last War: Survival Game ⬡</div>
+    <h1>Perang Gurun</h1>
+    <div class="header-sub">Pertempuran Badai Gurun — Pengaturan Tim</div>
+    <div class="header-line"><div class="diamond"></div></div>
+  </div>
+
+  <!-- INFO PERTEMPURAN -->
+  <div class="panel">
+    <div class="panel-title">◈ Info Pertempuran</div>
+    <div class="row col4">
+      <div class="field">
+        <label>Team</label>
+        <select id="team-ab">
+          <option value="A">Team A</option>
+          <option value="B">Team B</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Hari</label>
+        <select id="hari">
+          <option>Senin</option><option>Selasa</option><option>Rabu</option>
+          <option>Kamis</option><option selected>Jumat</option><option>Sabtu</option><option>Minggu</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Jam (WIB)</label>
+        <input type="text" id="jam" placeholder="20.00">
+      </div>
+      <div class="field">
+        <label>Pengirim</label>
+        <input type="text" id="sender" placeholder="Ken">
+      </div>
+    </div>
+    <div class="row col3">
+      <div class="field">
+        <label>Tanggal</label>
+        <input type="text" id="tgl" placeholder="18">
+      </div>
+      <div class="field">
+        <label>Bulan</label>
+        <input type="text" id="bln" placeholder="Juli">
+      </div>
+      <div class="field">
+        <label>Tahun</label>
+        <input type="text" id="thn" placeholder="2025">
+      </div>
+    </div>
+  </div>
+
+  <!-- TIM UTAMA -->
+  <div class="panel">
+    <div class="panel-title">◈ Tim Utama — 6 Posisi</div>
+    <div class="info-box">
+      Pemain utama harus sudah siap <strong>10 menit sebelum pertempuran</strong>. Bertanggung jawab menjaga area masing-masing.
+    </div>
+    <div class="teams-grid" id="main-teams"></div>
+  </div>
+
+  <!-- TIM SUPPORT -->
+  <div class="panel">
+    <div class="panel-title">◈ Tim Support / Roaming</div>
+    <div class="info-box teal">
+      Basmi musuh + support bangunan kosong + teleport ke setiap tempat yang butuh bantuan
+    </div>
+    <div class="support-grid" id="support-team"></div>
+  </div>
+
+  <!-- TIM CADANGAN -->
+  <div class="panel">
+    <div class="panel-title">◈ Tim Cadangan</div>
+    <div class="info-box red">
+      Langsung masuk jika peserta aktif <strong>kurang dari 20 member</strong>, 5 menit sebelum perang dimulai
+    </div>
+    <div class="cadangan-grid" id="cadangan-team"></div>
+  </div>
+
+  <!-- CATATAN -->
+  <div class="panel">
+    <div class="panel-title">◈ Peraturan & Catatan</div>
+    <ul class="notes-list">
+      <li><span class="icon">▶</span>Harus mengambil kotak suplai kuning bagi siapapun yang melihatnya</li>
+      <li><span class="icon">▶</span>Garnish bangunan pakai SQ 2/3</li>
+      <li><span class="icon">▶</span>Tim cadangan wajib membantu pemain yang sudah lemah (troops habis)</li>
+      <li><span class="icon">▶</span>Selalu kabarkan bila ada bangunan yang diambil alih oleh musuh</li>
+      <li><span class="icon">▶</span><strong>BERTANGGUNG JAWAB MENJAGA AREA MASING-MASING, JANGAN SAMPAI DIAMBIL ALIH MUSUH!</strong></li>
+    </ul>
+    <div style="margin-top:1rem">
+      <div class="field">
+        <label>Catatan Tambahan (opsional)</label>
+        <textarea id="extra-note" placeholder="Tulis catatan tambahan di sini..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIORITAS BANGUNAN -->
+  <div class="panel">
+    <div class="panel-title">◈ Prioritas Bangunan</div>
+    <table class="priority-table">
+      <tr><td>01</td><td>Silo Nuklir</td><td class="prio-high">KRITIS</td></tr>
+      <tr><td>02</td><td>Kilang Minyak I</td><td class="prio-high">TINGGI</td></tr>
+      <tr><td>03</td><td>Kilang Minyak II</td><td class="prio-high">TINGGI</td></tr>
+      <tr><td>04</td><td>Rumah Sakit Lapangan 1</td><td class="prio-mid">SEDANG</td></tr>
+      <tr><td>05</td><td>Rumah Sakit Lapangan 2</td><td class="prio-mid">SEDANG</td></tr>
+      <tr><td>06</td><td>Rumah Sakit Lapangan 3</td><td class="prio-mid">SEDANG</td></tr>
+      <tr><td>07</td><td>Rumah Sakit Lapangan 4</td><td class="prio-mid">SEDANG</td></tr>
+      <tr><td>08</td><td>Pusat Sains</td><td class="prio-mid">SEDANG</td></tr>
+      <tr><td>09</td><td>Pusat Informasi</td><td class="prio-mid">SEDANG</td></tr>
+      <tr><td>10</td><td>Gudang Senjata</td><td class="prio-low">NORMAL</td></tr>
+      <tr><td>11</td><td>Pabrik Tentara Bayaran</td><td class="prio-low">NORMAL</td></tr>
+    </table>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="generate()">
+      ⚔ Buat Pengumuman
+    </button>
+    <button class="btn btn-secondary hidden" id="btn-copy" onclick="copyText()">
+      ⎘ Salin Teks
+    </button>
+    <button class="btn btn-secondary hidden" id="btn-reset" onclick="resetForm()">
+      ↺ Reset
+    </button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-container" id="result-container">
+    <div class="result-header">
+      <span class="result-label">⬡ Hasil Pengumuman</span>
+      <span class="copy-status" id="copy-status">✓ Tersalin ke clipboard!</span>
+    </div>
+    <pre id="result-text"></pre>
+  </div>
+
+  <div class="footer">
+    <p>Last War: Survival — Desert Storm Battle Planner</p>
+  </div>
+
+</div>
+
+<script>
+  const mainTeams = [
+    {id:'t1', label:'Team 1', loc:'RS Lapangan 1'},
+    {id:'t2', label:'Team 2', loc:'RS Lapangan 2'},
+    {id:'t3', label:'Team 3', loc:'RS Lapangan 3'},
+    {id:'t4', label:'Team 4', loc:'RS Lapangan 4'},
+    {id:'t5', label:'Team 5', loc:'Gedung Science'},
+    {id:'t6', label:'Team 6', loc:'Pusat Informasi'},
+  ];
+
+  function playerRow(prefix, num) {
+    return `<div class="player-input-row">
+      <span class="p-num">${num}</span>
+      <input type="text" id="${prefix}-${num}" placeholder="Nama pemain...">
+    </div>`;
+  }
+
+  // Build main teams
+  const mt = document.getElementById('main-teams');
+  mainTeams.forEach(t => {
+    mt.innerHTML += `
+      <div class="team-block">
+        <div class="team-block-header">
+          <span class="team-label">${t.label}</span>
+          <span class="loc-badge">${t.loc}</span>
+        </div>
+        ${playerRow(t.id, 1)}
+        ${playerRow(t.id, 2)}
+      </div>`;
+  });
+
+  // Build support (8 players, 2 col)
+  const sup = document.getElementById('support-team');
+  for(let i=1;i<=8;i++) {
+    sup.innerHTML += `<div class="player-input-row">
+      <span class="p-num">${i}</span>
+      <input type="text" id="sup-${i}" placeholder="Nama pemain...">
+    </div>`;
+  }
+
+  // Build cadangan (10 players, 2 col)
+  const cad = document.getElementById('cadangan-team');
+  for(let i=1;i<=10;i++) {
+    cad.innerHTML += `<div class="player-input-row">
+      <span class="p-num">${i}</span>
+      <input type="text" id="cad-${i}" placeholder="Nama pemain...">
+    </div>`;
+  }
+
+  function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+  function generate() {
+    const ab = val('team-ab') || 'A';
+    const hari = val('hari') || 'Jumat';
+    const tgl = val('tgl') || '...';
+    const bln = val('bln') || '...';
+    const thn = val('thn') || '...';
+    const jam = val('jam') || '...';
+    const sender = val('sender') || 'Ken';
+
+    let txt = '';
+    txt += `⚔️ PERTEMPURAN BADAI GURUN TEAM ${ab}/B\n`;
+    txt += `📅 ${hari.toUpperCase()}, ${tgl} ${bln} ${thn} — ${jam} WIB\n`;
+    txt += `─────────────────────────────\n\n`;
+    txt += `⚠️ Pemain utama harus sudah siap 10 menit sebelum pertempuran.\n`;
+    txt += `⚠️ Pemain cadangan langsung masuk apabila peserta kurang dari 20 member (5 menit sebelum perang).\n\n`;
+
+    mainTeams.forEach(t => {
+      txt += `🏢 ${t.label}: (${t.loc})\n`;
+      txt += `  1. ${val(`${t.id}-1`) || '...'}\n`;
+      txt += `  2. ${val(`${t.id}-2`) || '...'}\n\n`;
+    });
+
+    txt += `🔁 Team Support (Roaming)\n`;
+    txt += `   Basmi musuh + support bangunan kosong + tele ke tempat yang butuh bantuan\n`;
+    for(let i=1;i<=8;i++) txt += `  ${i}. ${val(`sup-${i}`) || '...'}\n`;
+    txt += '\n';
+
+    txt += `🔄 Team Cadangan\n`;
+    txt += `   Langsung masuk jika peserta aktif < 20 member, 5 menit sebelum perang\n`;
+    for(let i=1;i<=10;i++) txt += `  ${i}. ${val(`cad-${i}`) || '...'}\n`;
+    txt += '\n';
+
+    txt += `─────────────────────────────\n`;
+    txt += `📋 CATATAN PENTING:\n`;
+    txt += `▶ Ambil kotak suplai KUNING jika melihatnya\n`;
+    txt += `▶ Garnish bangunan pakai SQ 2/3\n`;
+    txt += `▶ Cadangan bantu pemain yang troops-nya habis\n`;
+    txt += `▶ Kabarkan jika ada bangunan yang direbut musuh\n`;
+    txt += `▶ JAGA AREA MASING-MASING! JANGAN SAMPAI DIAMBIL ALIH MUSUH!\n`;
+
+    const extra = val('extra-note');
+    if(extra) txt += `▶ ${extra}\n`;
+
+    txt += `─────────────────────────────\n`;
+    txt += `Mohon maaf jika ada yang tidak terdaftar karena belum bergabung 24 jam saat pendaftaran ditutup atau keterbatasan kuota.\n\n`;
+    txt += `Terima kasih 🙏\nSalam hormat, ${sender}`;
+
+    document.getElementById('result-text').textContent = txt;
+    document.getElementById('result-container').style.display = 'block';
+    document.getElementById('btn-copy').classList.remove('hidden');
+    document.getElementById('btn-reset').classList.remove('hidden');
+
+    setTimeout(() => {
+      document.getElementById('result-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  function copyText() {
+    const txt = document.getElementById('result-text').textContent;
+    navigator.clipboard.writeText(txt).then(() => {
+      const s = document.getElementById('copy-status');
+      s.classList.add('show');
+      setTimeout(() => s.classList.remove('show'), 2500);
+    });
+  }
+
+  function resetForm() {
+    document.querySelectorAll('input[type=text], textarea').forEach(el => el.value = '');
+    document.getElementById('result-container').style.display = 'none';
+    document.getElementById('btn-copy').classList.add('hidden');
+    document.getElementById('btn-reset').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
